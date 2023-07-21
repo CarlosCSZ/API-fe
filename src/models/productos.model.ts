@@ -6,6 +6,7 @@ class Productos extends Model {
   id!: number;
   nombre!: string;
   descripcion!: string;
+  img!: string;
   precio!: number;
   iva!: number;
   stock!: number;
@@ -23,6 +24,10 @@ Productos.init(
       allowNull: false,
     },
     descripcion: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    img: {
       type: DataTypes.STRING,
       allowNull: false,
     },

@@ -7,7 +7,7 @@ const todosClientes = async () => {
   try {
     return await models.Clientes.findAll();
   } catch (error) {
-    throw new Error(`ERROR: ${error}`)
+    throw new Error(`[SERVICE]: ${error}`)
   }
 };
 
@@ -22,7 +22,7 @@ const clientePorId = async (id: number) => {
       ]
     });
   } catch (error) {
-    throw new Error(`ERROR: ${error}`)
+    throw new Error(`[SERVICE]: ${error}`)
   }
 };
 
@@ -30,7 +30,7 @@ const guardarCliente = async (body: CrearClienteDTO) => {
   try {
     return await models.Clientes.create(body);
   } catch (error) {
-    throw new Error(`ERROR: ${error}`)
+    throw new Error(`[SERVICE]: ${error}`)
   }
 };
 

@@ -1,4 +1,4 @@
-import { check, body, Meta, param } from 'express-validator';
+import { check, Meta, param } from 'express-validator';
 
 import { validatorResults } from '../utils/handleValidator';
 import { NextFunction, Request, Response } from 'express';
@@ -14,7 +14,8 @@ const productoValdiator = [
 
 const crearProductoValidator = [
   check('nombre').exists().notEmpty().isString(),
-  check('descripcion').exists().notEmpty().isString(),
+  check('descripcion').exists().notEmpty().isString().isLength({ max: 255 }),
+  check('img').exists().notEmpty().isString().isLength({ max: 255 }),
   check('precio').exists().notEmpty().isNumeric(),
   check('iva').exists().notEmpty().isNumeric(),
   check('stock').exists().notEmpty().isNumeric(),
