@@ -9,6 +9,8 @@ import {
   todosFacturas,
 } from "../services/facturas.service";
 import { CrearFacturaDTO } from "../dtos/factura.dto";
+import { handleError } from "../utils/handleHttpError";
+
 
 const traerFacturas = async (req: Request, res: Response) => {
   try {
@@ -16,7 +18,7 @@ const traerFacturas = async (req: Request, res: Response) => {
     res.status(200).send({ facturas });
   } catch (error) {
     console.error("ERROR: ", error);
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
@@ -27,7 +29,7 @@ const traerUnaFactura = async (req: Request, res: Response) => {
     res.status(200).send({ facturas });
   } catch (error) {
     console.error("ERROR: ", error);
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
@@ -38,7 +40,7 @@ const traerClientePorFactura = async (req: Request, res: Response) => {
     res.status(200).send({ cliente });
   } catch (error) {
     console.error("ERROR: ", error);
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
@@ -49,7 +51,7 @@ const traerProductosPorFactura = async (req: Request, res: Response) => {
     res.status(200).send({ productos });
   } catch (error) {
     console.error("ERROR: ", error);
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
@@ -60,7 +62,7 @@ const crearFacturas = async (req: Request, res: Response) => {
     res.status(201).send({ response });
   } catch (error) {
     console.error("ERROR: ", error);
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 

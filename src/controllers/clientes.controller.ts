@@ -3,6 +3,7 @@ import { matchedData } from "express-validator";
 
 import { clientePorId, guardarCliente, todosClientes } from "../services/clientes.service";
 import { ClientesDTO } from "../dtos/clientes.dto";
+import { handleError } from "../utils/handleHttpError";
 
 
 const traerClientes = async (req: Request, res: Response) => {
@@ -11,7 +12,7 @@ const traerClientes = async (req: Request, res: Response) => {
     res.status(200).send({ clientes })
   } catch (error) {
     console.error('ERROR: ', error)
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
@@ -22,7 +23,7 @@ const traerUnCliente = async (req: Request, res: Response) => {
     res.status(200).send({ cliente })
   } catch (error) {
     console.error('ERROR: ', error)
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
@@ -33,7 +34,7 @@ const crearClientes = async (req: Request, res: Response) => {
     res.status(201).send({ response })
   } catch (error) {
     console.error('ERROR: ', error)
-    //manejador de errores
+    handleError(res, 'something went wrong', error, 500)
   }
 };
 
