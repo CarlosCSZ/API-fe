@@ -12,6 +12,13 @@ const handleError = (res: Response, message: string, error: any, code: number) =
     message = `[DB ERROR]: ${errorMessage}`;
   }
 
+  if(error.message.includes('[SERVICE]', 'Producto no registrado')){
+    const errorMessage = error.message.split('Error: ').pop();
+    message = `[DB ERROR]: ${errorMessage}`;
+    code = 404;
+  }
+
+
   res.status(code);
   res.send({ error: message });
 }
