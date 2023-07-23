@@ -6,7 +6,7 @@ import server from "./routes";
 
 const app = express();
 
-const whiteList = ["http://localhost:4000", "http://localhost:4001"];
+const whiteList = ["http://localhost:4200", "http://localhost:4001"];
 app.use(cors({ origin: whiteList }));
 app.use(urlencoded({ extended: false }));
 app.use(express.json());

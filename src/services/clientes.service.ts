@@ -3,9 +3,17 @@ import { Facturas } from "../models/facturas.model";
 import { models } from "../models/index.model";
 
 
-const todosClientes = async () => {
+const todosClientes = async (cedula: string | undefined) => {
   try {
-    return await models.Clientes.findAll();
+    let option: any = {};
+    if(cedula){
+      option['where'] = {cedula}
+    }
+    const clientes = await models.Clientes.findAll(option);
+    if(clientes.length === 0){
+      throw new Error('Cliente no registrado')
+    }
+    return clientes
   } catch (error) {
     throw new Error(`[SERVICE]: ${error}`)
   }

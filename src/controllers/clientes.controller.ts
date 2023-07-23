@@ -8,7 +8,8 @@ import { handleError } from "../utils/handleHttpError";
 
 const traerClientes = async (req: Request, res: Response) => {
   try {
-    const clientes = await todosClientes();
+    const { cedula } = matchedData(req);
+    const clientes = await todosClientes(cedula);
     res.status(200).send({ clientes })
   } catch (error) {
     console.error('ERROR: ', error)
