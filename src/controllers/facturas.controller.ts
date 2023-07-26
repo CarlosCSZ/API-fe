@@ -5,6 +5,7 @@ import {
   clientePorFactura,
   facturaPorId,
   guardarFactura,
+  imprimirTemplate,
   productosPorFactura,
   todosFacturas,
 } from "../services/facturas.service";
@@ -57,14 +58,25 @@ const traerProductosPorFactura = async (req: Request, res: Response) => {
 
 const crearFacturas = async (req: Request, res: Response) => {
   try {
-    const factura = <CrearFacturaDTO>matchedData(req);
-    const response = await guardarFactura(factura);
-    res.status(201).send({ response });
+    const body = <CrearFacturaDTO>matchedData(req);
+    const factura = await guardarFactura(body);
+    res.status(201).send({ factura });
   } catch (error) {
     console.error("ERROR: ", error);
     handleError(res, 'something went wrong', error, 500)
   }
 };
+
+const imprimirFactura = async (req: Request, res: Response) => {
+  try {
+    const { id } = matchedData(req);
+    const impreso = await imprimirTemplate(id);
+    res.status(201).send({ impreso });
+  } catch (error) {
+    console.error("ERROR: ", error);
+    handleError(res, 'something went wrong', error, 500)
+  }
+}
 
 export {
   traerFacturas,
@@ -72,4 +84,5 @@ export {
   traerClientePorFactura,
   traerProductosPorFactura,
   crearFacturas,
+  imprimirFactura,
 };

@@ -30,9 +30,9 @@ const traerUnCliente = async (req: Request, res: Response) => {
 
 const crearClientes = async (req: Request, res: Response) => {
   try {
-    const cliente = <ClientesDTO>matchedData(req);
-    const response = await guardarCliente(cliente);
-    res.status(201).send({ response })
+    const body = <ClientesDTO>matchedData(req);
+    const cliente = await guardarCliente(body);
+    res.status(201).send({ cliente })
   } catch (error) {
     console.error('ERROR: ', error)
     handleError(res, 'something went wrong', error, 500)

@@ -11,5 +11,4 @@ interface CrearFacturaDTO extends Omit<Facturas, 'id' | 'total'> {
   productos: number[];
 };
 
-
 export { FacturasDTO, CrearFacturaDTO };

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Factura Electrónica</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+        }
+        .invoice-container {
+          width: 700px;
+          margin: 0 auto;
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .header h1 {
+          margin: 0;
+          padding: 0;
+        }
+        .client-info {
+          margin-bottom: 30px;
+        }
+        .product-details table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        .product-details th,
+        .product-details td {
+          border: 1px solid #ccc;
+          padding: 8px;
+        }
+        .product-details th {
+          background-color: #f2f2f2;
+        }
+        .total {
+          text-align: right;
+          margin-top: 30px;
+        }
+        .total h2 {
+          margin: 0;
+          padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-container">
+        <div class="header">
+            <h1>Factura Electrónica</h1>
+            <p>Número de factura: 00000{{id}}</p>
+        </div>
+        <div class="client-info">
+            <h2>Información del Cliente</h2>
+            <p>Nombre: {{cliente.id}}</p>
+            <p>Cedula: {{cliente.cedula}}</p>
+            <p>Celular: {{cliente.celular}}</p>
+            <p>Dirección: {{cliente.direccion}}</p>
+            <!-- Agrega aquí más campos de datos del cliente según tus necesidades -->
+        </div>
+        <div class="product-details">
+            <h2>Detalles del Producto</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>IVA</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each productos as |prod|}}
+                    <tr>
+                        <td>{{prod.producto.nombre}}</td>
+                        <td>{{prod.producto.cantidad}}</td>
+                        <td>{{prod.producto.precio}}</td>
+                        <td>{{prod.producto.iva}}</td>
+                        <td>{{prod.producto.precio * (prod.producto.precio*prod.producto.iva/100)}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="total">
+            <h2>Total a pagar: {{total}}</h2>
+        </div>
+    </div>
+</body>
+
+</html>

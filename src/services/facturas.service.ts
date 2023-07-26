@@ -1,8 +1,11 @@
+import puppeteer from "puppeteer";
+
 import { CrearFacturaDTO, FacturasDTO } from "../dtos/factura.dto";
 import { Clientes } from "../models/clientes.model";
 import { FacturasProductos } from "../models/facturaProductos.model";
 import { models } from "../models/index.model";
 import { productoPorId } from "./producto.service";
+import { compileHbs } from "../utils/handleHbs";
 
 const todosFacturas = async () => {
   try {
@@ -110,10 +113,37 @@ const guardarFactura = async (body: CrearFacturaDTO) => {
   }
 };
 
+const imprimirTemplate = async (id: number) => {
+  try {
+    const factura = <FacturasDTO>await facturaPorId(id);
+    console.log('factura: ', factura)
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const content = await compileHbs(factura);
+    console.log('content: ', content)
+
+    await page.setContent(content);
+    await page.emulateMediaType('screen');
+    await page.pdf({
+      path: `facturaElectronica_${factura.cliente.nombre}.pdf`,
+      format: 'A4',
+      printBackground: true
+    });
+
+    await page.close()
+    return true
+
+  } catch (error) {
+    throw new Error(`[SERVICE]: ${error}`);
+  }
+
+}
+
 export {
   todosFacturas,
   facturaPorId,
   clientePorFactura,
   productosPorFactura,
   guardarFactura,
+  imprimirTemplate
 };
