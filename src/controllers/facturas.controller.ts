@@ -70,8 +70,10 @@ const crearFacturas = async (req: Request, res: Response) => {
 const imprimirFactura = async (req: Request, res: Response) => {
   try {
     const { id } = matchedData(req);
-    const impreso = await imprimirTemplate(id);
-    res.status(201).send({ impreso });
+    const pdfBuffer = await imprimirTemplate(id);
+    res.setHeader('Content-Disposition', `attachment; filename="${pdfBuffer.filename}"`);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.status(200).send(pdfBuffer);
   } catch (error) {
     console.error("ERROR: ", error);
     handleError(res, 'something went wrong', error, 500)

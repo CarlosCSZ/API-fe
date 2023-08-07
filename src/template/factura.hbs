@@ -31,10 +31,17 @@
         .product-details th,
         .product-details td {
           border: 1px solid #ccc;
-          padding: 8px;
+          padding: 6px 0;
+          text-align: center;
         }
         .product-details th {
           background-color: #f2f2f2;
+        }
+        .prod {
+          width: 200px;
+        }
+        .pu {
+          width: 150px
         }
         .total {
           text-align: right;
@@ -55,10 +62,10 @@
         </div>
         <div class="client-info">
             <h2>Información del Cliente</h2>
-            <p>Nombre: {{cliente.id}}</p>
-            <p>Cedula: {{cliente.cedula}}</p>
-            <p>Celular: {{cliente.celular}}</p>
-            <p>Dirección: {{cliente.direccion}}</p>
+            <p>Nombre: {{nombre}}</p>
+            <p>Cedula: {{cedula}}</p>
+            <p>Celular: {{celular}}</p>
+            <p>Dirección: {{direccion}}</p>
             <!-- Agrega aquí más campos de datos del cliente según tus necesidades -->
         </div>
         <div class="product-details">
@@ -66,28 +73,28 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Producto</th>
+                        <th class="prod">Producto</th>
                         <th>Cantidad</th>
-                        <th>Precio Unitario</th>
+                        <th class="pu">Precio Unitario</th>
                         <th>IVA</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each productos as |prod|}}
+                    {{#each productos as |item|}}
                     <tr>
-                        <td>{{prod.producto.nombre}}</td>
-                        <td>{{prod.producto.cantidad}}</td>
-                        <td>{{prod.producto.precio}}</td>
-                        <td>{{prod.producto.iva}}</td>
-                        <td>{{prod.producto.precio * (prod.producto.precio*prod.producto.iva/100)}}</td>
+                        <td class="prod">{{item.nombre}}</td>
+                        <td>{{item.cantidad}}</td>
+                        <td class="pu">$ {{item.precio}}</td>
+                        <td>{{item.iva}}%</td>
+                        <td>$ {{item.valor}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
         </div>
         <div class="total">
-            <h2>Total a pagar: {{total}}</h2>
+            <h2>Total a pagar: $ {{total}}</h2>
         </div>
     </div>
 </body>

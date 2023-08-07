@@ -1,5 +1,8 @@
 import { FacturasProductos } from "../models/facturaProductos.model";
+import { ProductosDTO } from "./productos.dto";
 
-class FacturaProductoDTO extends FacturasProductos {}
+interface FacturaProductoDTO extends FacturasProductos {
+  producto: ProductosDTO;
+}
 
 export { FacturaProductoDTO }

@@ -1,8 +1,6 @@
 import puppeteer from "puppeteer";
 
-import { CrearFacturaDTO, FacturasDTO } from "../dtos/factura.dto";
-import { Clientes } from "../models/clientes.model";
-import { FacturasProductos } from "../models/facturaProductos.model";
+import { CrearFacturaDTO, FacturaTemplate, FacturasDTO } from "../dtos/factura.dto";
 import { models } from "../models/index.model";
 import { productoPorId } from "./producto.service";
 import { compileHbs } from "../utils/handleHbs";
@@ -17,18 +15,29 @@ const todosFacturas = async () => {
 
 const facturaPorId = async (id: number) => {
   try {
-    return await models.Facturas.findByPk(id, {
+    const factura = await models.Facturas.findByPk(id, {
       include: [
         {
-          model: Clientes,
+          model: models.Clientes,
           as: "cliente",
         },
         {
-          model: FacturasProductos,
+          model: models.FacturasProductos,
           as: "productos",
+          include: [
+            {
+              model: models.Productos,
+              as: "producto",
+            }
+          ]
         },
       ],
     });
+    if(!factura) {
+      throw new Error('Fcatura does not exist')
+    }
+
+    return factura
   } catch (error) {
     throw new Error(`[SERVICE]: ${error}`);
   }
@@ -39,15 +48,14 @@ const clientePorFactura = async (id: number) => {
     const factura = <FacturasDTO>await models.Facturas.findByPk(id, {
       include: [
         {
-          model: Clientes,
+          model: models.Clientes,
           as: "cliente",
-        },
-        {
-          model: FacturasProductos,
-          as: "productos",
         },
       ],
     });
+    if(!factura) {
+      throw new Error('Factura does not exist')
+    }
 
     return factura.cliente;
   } catch (error) {
@@ -57,18 +65,23 @@ const clientePorFactura = async (id: number) => {
 
 const productosPorFactura = async (id: number) => {
   try {
-    const factura = <FacturasDTO>await models.Facturas.findByPk(id, {
+    const factura = <FacturasDTO>await models.Facturas.findByPk(3, {
       include: [
         {
-          model: Clientes,
-          as: "cliente",
-        },
-        {
-          model: FacturasProductos,
+          model: models.FacturasProductos,
           as: "productos",
+          include: [
+            {
+              model: models.Productos,
+              as: "producto",
+            }
+          ]
         },
       ],
     });
+    if(!factura) {
+      throw new Error('Factura does not exist')
+    }
 
     return factura.productos;
   } catch (error) {
@@ -116,22 +129,36 @@ const guardarFactura = async (body: CrearFacturaDTO) => {
 const imprimirTemplate = async (id: number) => {
   try {
     const factura = <FacturasDTO>await facturaPorId(id);
-    console.log('factura: ', factura)
+    const data: FacturaTemplate = {
+      nombre: factura.cliente.nombre,
+      cedula: factura.cliente.cedula,
+      celular: factura.cliente.celular,
+      direccion: factura.cliente.direccion,
+      total: factura.total,
+      productos: factura.productos.map((prod) => {
+        const producto = prod.producto;
+        return {
+          ...producto.dataValues,
+          cantidad: prod.cantidad,
+          valor: (producto.precio + producto.iva*producto.precio/100) * prod.cantidad
+        }
+      }),
+    };
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    const content = await compileHbs(factura);
-    console.log('content: ', content)
+    const content = await compileHbs(data);
 
     await page.setContent(content);
     await page.emulateMediaType('screen');
-    await page.pdf({
-      path: `facturaElectronica_${factura.cliente.nombre}.pdf`,
+    const pdfBuffer = await page.pdf({
       format: 'A4',
-      printBackground: true
     });
 
     await page.close()
-    return true
+    return {
+      pdfBuffer,
+      filename: `facturaElectronica_${factura.cliente.nombre}.pdf`
+    }
 
   } catch (error) {
     throw new Error(`[SERVICE]: ${error}`);
