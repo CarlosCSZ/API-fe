@@ -21,10 +21,13 @@ Facturas.hasMany(FacturasProductos, { foreignKey: 'facturaId', as: 'productos' }
 FacturasProductos.belongsTo(Facturas, { foreignKey: "facturaId", as: "factura" });
 FacturasProductos.belongsTo(Productos, { foreignKey: "productoId", as: "producto" });
 
+const databaseSync = async () => {
+  await Clientes.sync();
+  await Productos.sync();
+  await Facturas.sync();
+  await FacturasProductos.sync();
+};
+databaseSync();
 
-Clientes.sync();
-Productos.sync();
-Facturas.sync();
-FacturasProductos.sync();
 
 export { sequelize, models }
