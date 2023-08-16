@@ -144,9 +144,19 @@ const imprimirTemplate = async (id: number) => {
         }
       }),
     };
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+        "--single-process",
+        "--no-ygote"
+      ],
+      executablePath:
+      process.env.NODE_ENV==="production" ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath()
+    });
     const page = await browser.newPage();
     const content = await compileHbs(data);
+    console.log("datos: ", data, "contenido: ", content)
 
     await page.setContent(content);
     await page.emulateMediaType('screen');
