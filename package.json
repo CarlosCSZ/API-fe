@@ -7,6 +7,7 @@
     "start": "ts-node index.ts",
     "dev": "nodemon index.ts",
     "build": "tsc --project tsconfig.json",
+    "deploy": "git checkout -b temp && git reset -- fly.toml Dockerfile package*.json dist/* && git push origin deploy && git checkout master && git branch -D temp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
