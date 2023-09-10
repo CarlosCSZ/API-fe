@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start:prod": "ts-node index.js",
+    "start:dev": "ts-node index.ts",
     "dev": "nodemon index.ts",
     "build": "tsc --project tsconfig.json",
+    "deploy": "git checkout -b temp && git reset -- fly.toml Dockerfile package*.json dist/* && git push origin deploy && git checkout master && git branch -D temp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -24,7 +26,8 @@
     "sequelize": "^6.32.1",
     "tedious": "^16.2.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.3",
@@ -34,6 +37,7 @@
     "@types/handlebars": "^4.1.0",
     "@types/puppeteer": "^7.0.4",
     "@types/sequelize": "^4.28.15",
+    "@types/uuid": "^9.0.3",
     "nodemon": "^2.0.17"
   }
 }
